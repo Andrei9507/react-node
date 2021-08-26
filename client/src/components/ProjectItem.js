@@ -9,6 +9,7 @@ export const ProjectItem = (props) => {
     const [projectName, setProjectName] = useState(props.projectItem.name)
     const [projectDescription, setProjectDescription] = useState(props.projectItem.description)
     const [showEdit, setShowEdit] = useState(false)
+    const [removeProjectAsk, setRemoveProjectAsk] = useState(false)
     const [updateProject] = useMutation(updateProjectMutation)
     const [removeProject] = useMutation(removeProjectMutation)
 
@@ -60,9 +61,26 @@ export const ProjectItem = (props) => {
                                         
                                     </div>
                                     <div className="card-footer justify-content-center">
-                                        <Link to={`/projects/${projectId}`} className="btn btn-sm btn-info" >Project Details</Link>
-                                        <button className="btn btn-sm btn-secondary ml-2" onClick={showEditForm}>Edit</button>
-                                        <button className="btn btn-sm btn-danger ml-2"  onClick={removeProjectAction}>Remove</button>
+                                        {(() => {
+                                            if (!removeProjectAsk) {
+                                                return ( 
+                                                    <React.Fragment>
+                                                       <Link to={`/projects/${projectId}`} className="btn btn-sm btn-info" >Project Details</Link>
+                                        
+                                                        <button className="btn btn-sm btn-secondary ml-2" onClick={showEditForm}>Edit</button>
+                                                        <button className="btn btn-sm btn-danger ml-2"  onClick={ (e) => setRemoveProjectAsk(true)}>Remove</button>
+                                                    </React.Fragment>
+                                                ) 
+                                            }else { 
+                                                return (
+                                                    <div className="justify-content-center d-flex" >
+                                                        <button className="btn btn-sm btn-secondary ml-2"  onClick={ (e) => setRemoveProjectAsk(false)}>No</button>    
+                                                        <button className="btn btn-sm btn-danger ml-2"  onClick={removeProjectAction}>Yes</button>
+                                                    </div>
+                                                ) 
+                                            }
+                                        })()}
+                                            
                                     </div>
 
                                 </div>

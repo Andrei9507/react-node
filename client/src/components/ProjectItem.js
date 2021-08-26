@@ -5,7 +5,7 @@ import {Link } from 'react-router-dom';
 
 export const ProjectItem = (props) => {
 
-    const [projectId, setProjectId] = useState(props.projectItem.id)
+    const [projectId] = useState(props.projectItem.id)
     const [projectName, setProjectName] = useState(props.projectItem.name)
     const [projectDescription, setProjectDescription] = useState(props.projectItem.description)
     const [showEdit, setShowEdit] = useState(false)
@@ -29,7 +29,6 @@ export const ProjectItem = (props) => {
                 name: projectName,
                 description: projectDescription
             }
-            // refetchQueries: [{query: getProjectsQuery}] // refetch query
         }).then(() => {
             hideEditForm()
         });
@@ -90,114 +89,3 @@ export const ProjectItem = (props) => {
     )
 
 }
-
-
-
-
-// import React, {Component} from 'react';
-// import { graphql } from 'react-apollo';
-// import {Link } from 'react-router-dom';
-// import {flowRight as compose} from 'lodash';
-// import {updateProjectMutation, removeProjectMutation, getProjectsQuery} from '../queries/queries';
-
-// class ProjectItem extends Component {
-
-//     constructor(props) {
-//         super(props)
-//         this.state = {
-//             // selected: null,
-//             projectId: this.props.projectItem.id,
-//             projectName: this.props.projectItem.name,
-//             projectDescription: this.props.projectItem.description,
-//             showEdit: false
-//         }
-//         this.showEditProjectForm = this.showEditProjectForm.bind(this)
-//     }
-
-//     showEditProjectForm() {
-//         this.setState(prevState => ({
-//             showEdit: !prevState.showEdit
-//         }));
-//     }
-
-//     // fix error after remove item
-//     removeProject(e) {
-//         e.preventDefault();
-//         this.props.removeProjectMutation({
-//             variables: {
-//                 id: this.state.projectId
-//             },
-//             refetchQueries: [{query: getProjectsQuery}] // refetch query
-//         })
-//         .then(() => {
-//             this.props.triggerParentUpdate()
-//         });
-//     }
-
-//     submitForm(e) {
-//         e.preventDefault();
-//         this.props.updateProjectMutation({
-//             variables: {
-//                 id: this.state.projectId,
-//                 name: this.state.projectName,
-//                 description: this.state.projectDescription
-//             }
-//             // refetchQueries: [{query: getProjectsQuery}] // refetch query
-//         }).then(() => {
-//             this.showEditProjectForm()
-//         });
-//     }
-
-//     render() {
-//         // console.log(this.props)
-//         return (
-//             <React.Fragment>
-//                 {(() => {
-//                     if (!this.state.showEdit) {
-//                             return (
-//                                 <div className="card mb-5" style={{width: "18rem"}}>
-//                                     <div className="card-body">
-//                                         <h5 className="card-title">Project Name: {this.props.projectItem.name}</h5>
-//                                         <p className="card-text"> Project Description: {this.props.projectItem.description}</p>
-                                        
-//                                     </div>
-//                                     <div className="card-footer justify-content-center">
-//                                         <Link to={`/projects/${this.props.projectItem.id}`} className="btn btn-sm btn-info" >Project Details</Link>
-//                                         <button className="btn btn-sm btn-secondary ml-2" onClick={this.showEditProjectForm}>Edit</button>
-//                                         <button className="btn btn-sm btn-danger ml-2"  onClick={this.removeProject.bind(this) }>Remove</button>
-//                                     </div>
-
-//                                 </div>
-//                             )
-//                     }else {
-//                         return (
-//                             <div className="card mb-5" style={{width: "18rem"}}>
-//                                 <form onSubmit={this.submitForm.bind(this) }>
-//                                     <div className="card-body">
-//                                             <input className="form-control mb-2" value={this.state.projectName}  onChange={ (e) => this.setState({ projectName: e.target.value })} />
-//                                         <textarea className="form-control" value={this.state.projectDescription} onChange={ (e) => this.setState({ projectDescription: e.target.value })} ></textarea>
-                                        
-//                                     </div>
-//                                     <div className="justify-content-center d-flex card-footer">
-//                                             <button className="btn btn-sm btn-success mt-1" >Update</button>
-//                                             <button className="btn btn-sm btn-danger mt-1 ml-2" onClick={this.showEditProjectForm} >Cancel</button>
-//                                     </div>
-//                                 </form>
-//                             </div>
-                            
-//                         )
-//                     }
-//                 })()}
-//             </React.Fragment>
-            
-           
-//         )
-//     }
-// }
-
-
-// export default compose(
-//     graphql(updateProjectMutation, {name: 'updateProjectMutation'}),
-//     graphql(removeProjectMutation, {name: 'removeProjectMutation'}),
-//     graphql(getProjectsQuery, {name: 'getProjectsQuery'})
-// )(ProjectItem);

@@ -11,7 +11,13 @@ export const ProjectDetails = (props) => {
     const [project, setProject ] = useState(null)
     const [timeAmount, setTimeAmount ] = useState('')
     const [timeDescription, setTimeDescription ] = useState('')
-    const [addTime] = useMutation(addTimeMutation)
+    const [addTime] = useMutation(addTimeMutation, {
+        variables: {
+            amount: parseInt(timeAmount),
+            description: timeDescription,
+            projectId: projectId
+        }
+    })
     const [removeTime] = useMutation(removeTimeMutation)
     
   
@@ -32,13 +38,7 @@ export const ProjectDetails = (props) => {
 
     const submitAddTime = e => {
         e.preventDefault();
-        addTime({
-            variables: {
-                amount: parseInt(timeAmount),
-                description: timeDescription,
-                projectId: projectId
-            }
-        })
+        addTime()
         .then(() => {
             hideAddTime()
             callProject()
@@ -147,154 +147,3 @@ export const ProjectDetails = (props) => {
         </div>
     )
 }
-
-
-
-
-
-
-
-
-
-// import React, {Component} from 'react';
-// import { graphql } from 'react-apollo';
-// import {flowRight as compose} from 'lodash';
-// import {getProjectQuery, addTimeMutation} from '../queries/queries';
-
-// class ProjectDetails extends Component {
-//     constructor(props) {
-//         super(props);
-//         this.state= {
-//             displayAddTimeForm: false,
-//             timeAmount: 0,
-//             timeDescription: '',
-//             projectId: this.props.data.variables.id
-//         }
-//         this.showAddTimeForm = this.showAddTimeForm.bind(this)
-        
-//     }
-
-//     showAddTimeForm() {
-//         this.setState(prevState => ({
-//             displayAddTimeForm: !prevState.displayAddTimeForm
-//         }));
-//     }
-
-//     submitForm(e) {
-//         e.preventDefault();
-//         this.props.addTimeMutation({
-//             variables: {
-//                 amount: parseInt(this.state.timeAmount),
-//                 description: this.state.timeDescription,
-//                 projectId: this.state.projectId
-//             },
-//             refetchQueries: [{query: getProjectQuery,
-//                 variables: {
-//                     id: this.state.projectId
-//                 }
-//             }] // refetch query
-//         });
-
-//         this.setState(prevState => ({
-//             displayAddTimeForm: !prevState.displayAddTimeForm
-//         }));
-
-//     }
-    
-//     displayProjectDetails() {
-//         const { project } = this.props.data;
-//         if(project) {
-//             return(
-//                 <div>
-//                     <h2>Project Name: {project.name}</h2>
-//                     <h2> Project Description: {project.description}</h2>
-//                     <div className="justify-content-center d-flex">
-//                         <table className="table table-bordered mt-5  project-times text-center">
-//                             <thead>
-//                                 <tr>
-//                                     <td><strong>Time Duration</strong></td>
-//                                     <td><strong>Time Description</strong></td>
-//                                     <td><strong>Action</strong></td>
-//                                 </tr>
-//                             </thead>
-//                             <tbody>
-//                                 {
-//                                     project.times.map(item =>{
-//                                         return <tr key={item.id}>
-//                                             <td>{item.amount}</td>
-//                                             <td>{item.description}</td>
-//                                             <td > <button className="btn btn-sm btn-danger">Remove</button></td>
-//                                         </tr>
-//                                     })
-//                                 }
-//                             </tbody>
-//                         </table>
-//                     </div>
-//                 </div>
-//             )
-//         } else {
-//             return <div>No project selected</div>
-//         }
-//     }
-
-//     render() {
-//         console.log(this.props)
-//         return (
-//             <div id="project-details">
-//                 {this.displayProjectDetails()}
-               
-//                 {(() => {
-//                     if (this.state.displayAddTimeForm) {
-//                         return (
-//                             <button className="btn btn-sm btn-danger mb-5" onClick={this.showAddTimeForm}>
-//                                 Cancel
-//                             </button>   
-//                         )
-//                     } else{
-//                         return (
-//                             <button className="btn btn-sm btn-primary" onClick={this.showAddTimeForm}>
-//                                 Add Time
-//                             </button>   
-//                         )
-//                     }
-//                 })()}
-            
-
-//                 {(() => {
-//                     if (this.state.displayAddTimeForm) {
-//                         return (
-//                             <form id="add-project" className="card p-4 mb-5" onSubmit={this.submitForm.bind(this) } >
-//                                 <div className="form-group">
-//                                     <label>Time amount</label>
-//                                     <input type="text" className="form-control" onChange={ (e) => this.setState({ timeAmount: e.target.value })}/>
-//                                 </div>
-//                                 <div className="form-group">
-//                                     <label>Time description</label>
-//                                     <textarea type="text" className="form-control" onChange={ (e) => this.setState({ timeDescription: e.target.value })}/>
-//                                 </div>
-//                                 <div className="form-group">
-//                                     <button className="btn btn-sm btn-success">Submit</button>
-//                                 </div>
-//                             </form>
-//                         )
-//                     }
-//                 })()} 
-//             </div>
-//         );
-//     }
-// }
-
-// export default compose(
-    
-//     graphql(addTimeMutation, {name: 'addTimeMutation'}),
-//     graphql(getProjectQuery, {
-//         options:(props) => {
-//             return{
-//                 variables: {
-//                     id: props.match.params.id
-//                 }
-//             }
-//         }
-        
-//     })
-// )(ProjectDetails);

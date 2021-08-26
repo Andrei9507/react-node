@@ -2,10 +2,7 @@ import React, {useState} from 'react';
 import { useQuery} from 'react-apollo'; // good one
 import {AddProject} from './AddProject';
 import {ProjectItem} from './ProjectItem';
-// import { useQuery } from '@apollo/react-hooks';
-// import {flowRight as compose} from 'lodash';
-import {getProjectsQuery, removeProjectMutation} from '../queries/queries';
-// import ProjectDetails from './ProjectDetails';
+import {getProjectsQuery} from '../queries/queries';
 
 
 export const ProjectList = () => {
@@ -22,7 +19,7 @@ export const ProjectList = () => {
         setShowCreate(false)
     }
             
-    // refetch query with async because response are coming later
+    // refetch query with async because response is async
     const callProjects = async() => {
         await refetch()
             .then((response) => {
@@ -39,7 +36,6 @@ export const ProjectList = () => {
         } else {
             return data.projects.map(project => {
                     return(
-                        // handleRemove={this.removeItem} event 
                         <ProjectItem key={project.id} projectItem={project} triggerParentUpdate={callProjects} />
                     );
             })
@@ -78,109 +74,3 @@ export const ProjectList = () => {
         </div>
     )
 }
-
-
-
-
-// import React, {Component, useState, useEffect} from 'react';
-// import { graphql,useQuery} from 'react-apollo'; // good one
-// import AddProject from './AddProject';
-// import ProjectItem from './ProjectItem';
-// // import { useQuery } from '@apollo/react-hooks';
-// import {flowRight as compose} from 'lodash';
-// import {getProjectsQuery, removeProjectMutation} from '../queries/queries';
-// import ProjectDetails from './ProjectDetails';
-
-// class ProjectList extends Component {
-//     constructor(props) {
-//         super(props)
-//         this.state = {
-//             // selected: null,
-//             showCreate: false,
-//             itemRemoved: null
-//         }
-//         this.showAddProjectForm = this.showAddProjectForm.bind(this)
-//     }
-
-//     // showAddProjectForm() {
-//     //     this.setState({
-//     //         showAddProjectForm: true
-//     //     })
-//     // }
-
-//     // removeItem(data) {
-//     //     const projectId = data.projectId 
-//     //     this.setState({
-//     //         removeItem: projectId
-//     //     });
-
-//     //     console.log(this.state.removeItem)
-//     //     // this.props.removeProjectMutation({
-//     //     //     variables: {
-//     //     //         id: data.projectId
-//     //     //     },
-//     //     //     // refetchQueries: [{query: getProjectsQuery}] // refetch query
-//     //     // })
-//     // }
-    
-//     showAddProjectForm() {
-//         this.setState(prevState => ({
-//             showCreate: !prevState.showCreate
-//         }));
-//     }
-
-//     displayProjects() {
-//         const data = this.props.getProjectsQuery
-//         if(data.loading) {
-//             return( <div> Loading projects... </div>);
-//         } else {
-//             return data.projects.map(project => {
-//                 return(
-//                     // handleRemove={this.removeItem} event 
-//                     <ProjectItem key={project.id} projectItem={project}/>
-//                 );
-//             })
-//         }
-//     }
-//     render() {
-//         return (
-//             <div id="main">
-                
-//                 {(() => {
-//                 if (this.state.showCreate) {
-//                         return (
-//                             <button className="btn btn-sm btn-danger mb-5" onClick={this.showAddProjectForm}>Cancel</button>
-//                         )
-//                 }else {
-//                     return (
-//                         <button className="btn btn-sm btn-primary mb-5" onClick={this.showAddProjectForm}>Create Project</button>
-//                     )
-//                 }
-//                 })()}
-                
-                
-//                 {(() => {
-//                 if (this.state.showCreate) {
-//                         return (
-//                             <AddProject triggerParentUpdate={this.showAddProjectForm}/>
-//                         )
-//                 }else {
-//                     // nothing doing for the moment
-//                 }
-//                 })()} 
-                
-//                 <div id="project-list" className="d-flex justify-content-around flex-wrap">
-//                     {this.displayProjects()}
-//                 </div>
-//             </div>
-//         )
-//     }
-// }
-
-
-// export default compose(
-//     graphql(getProjectsQuery, {name: 'getProjectsQuery'}),
-//     graphql(removeProjectMutation, {name: 'removeProjectMutation'})
-// )(ProjectList);
-
-// export default graphql(getProjectsQuery)(ProjectList);

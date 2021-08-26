@@ -1,6 +1,5 @@
 const graphql = require("graphql");
 const _= require("lodash");
-const db = require("../db")
 const Project = require("../models/project");
 const Time = require("../models/time");
 
@@ -163,7 +162,6 @@ const Mutation = new GraphQLObjectType({
             resolve(parent, args) {
                 return Project.findOneAndRemove({_id: args.id}, (error, deletedRecord) => {
                     if(!error) {
-                        // console.log("delete", deletedRecord)
                         // maybe something else will be returned from here
                         return deletedRecord
                     } else {
@@ -178,7 +176,6 @@ const Mutation = new GraphQLObjectType({
             resolve(parent, args) {
                 return Time.findOneAndRemove({_id: args.id}, (error, deletedRecord) => {
                     if(!error) {
-                        // console.log("delete", deletedRecord)
                         // maybe something else will be returned from here
                         return deletedRecord
                     } else {

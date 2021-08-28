@@ -12,7 +12,7 @@ import {ProjectDetails} from './components/ProjectDetails';
 
 // apollo client setup
 const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql'
+  uri: 'http://localhost:4000/'
 })
 class App extends Component {
   render() {

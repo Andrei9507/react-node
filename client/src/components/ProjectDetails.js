@@ -1,25 +1,16 @@
 import React, {useState } from 'react';
-import {getProjectQuery, addTimeMutation, removeTimeMutation} from '../queries/queries';
-import { useQuery, useMutation} from 'react-apollo';
+import {getProjectQuery} from '../queries/queries';
+import { useQuery} from 'react-apollo';
+import {TimeItem} from './TimeItem'
+import {AddTime} from './AddTime';
 
 
 export const ProjectDetails = (props) => {
 
     
-    const [projectId, setProjectId] = useState(props.match.params.id)
+    const [projectId] = useState(props.match.params.id)
     const [showAddTImeForm, setShowAddTImeForm] = useState(false)
     const [project, setProject ] = useState(null)
-    const [timeAmount, setTimeAmount ] = useState('')
-    const [timeDescription, setTimeDescription ] = useState('')
-    const [addTime] = useMutation(addTimeMutation, {
-        variables: {
-            amount: parseInt(timeAmount),
-            description: timeDescription,
-            projectId: projectId
-        }
-    })
-    const [removeTime] = useMutation(removeTimeMutation)
-    
   
     const { loading, error, data, refetch } = useQuery(getProjectQuery,{ 
         variables: {
@@ -34,29 +25,21 @@ export const ProjectDetails = (props) => {
 
     const hideAddTime = () => {
         setShowAddTImeForm(false)
+        callProject()
     }
 
-    const submitAddTime = e => {
-        e.preventDefault();
-        addTime()
-        .then(() => {
-            hideAddTime()
-            callProject()
-        })
-    }
-
-    const removeTimeAction = (timeId) => {
-        
-        removeTime({
-            variables: {
-                id: timeId
+    const displayTotalHours = () => {
+        if(project) {
+            const data = project
+            if(data.project.times.length) {
+                let sum = data.project.times.map(el => el.amount).reduce((accumulator, currentValue) => { return accumulator + currentValue });
+                
+                return sum
             }
-        })
-        .then(() => {
-            callProject()
-        });
+            return <React.Fragment>0 </React.Fragment>
+           
+        }
     }
-
     const callProject = async() => {
        await refetch()
             .then((response) => {
@@ -80,7 +63,7 @@ export const ProjectDetails = (props) => {
                         <table className="table table-bordered mt-5  project-times text-center">
                             <thead>
                                 <tr>
-                                    <td><strong>Time Duration</strong></td>
+                                    <td><strong>Time Amount</strong></td>
                                     <td><strong>Time Description</strong></td>
                                     <td><strong>Action</strong></td>
                                 </tr>
@@ -88,14 +71,16 @@ export const ProjectDetails = (props) => {
                             <tbody>
                                 {
                                     data.project.times.map(item =>{
-                                        return <tr key={item.id}>
-                                            <td>{item.amount}</td>
-                                            <td>{item.description}</td>
-                                            <td > <button className="btn btn-sm btn-danger"  onClick={() => removeTimeAction(item.id)} >Remove</button></td>
-                                        </tr>
+                                        return (
+                                            <TimeItem key={item.id} timeItem={item} triggerTime={callProject}/>
+                                        )
                                     })
                                 }
-                             
+                             <tr>
+                                <td colSpan="3">
+                                    Total Hours: {displayTotalHours()}
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -128,19 +113,7 @@ export const ProjectDetails = (props) => {
                 {(() => {
                     if (showAddTImeForm) {
                         return (
-                            <form id="add-project" className="card p-4 mb-5" onSubmit={submitAddTime} >
-                                <div className="form-group">
-                                    <label>Time amount</label>
-                                    <input type="text" className="form-control" onChange={ (e) => setTimeAmount(e.target.value)}/>
-                                </div>
-                                <div className="form-group">
-                                    <label>Time description</label>
-                                    <textarea type="text" className="form-control" onChange={ (e) => setTimeDescription(e.target.value)}/>
-                                </div>
-                                <div className="form-group">
-                                    <button className="btn btn-sm btn-success">Submit</button>
-                                </div>
-                            </form>
+                            <AddTime  projectId={projectId} triggerCloseAddTime={hideAddTime}/>
                         )
                     }
                 })()} 

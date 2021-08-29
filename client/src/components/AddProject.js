@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {addProjectMutation} from '../queries/queries';
-import { useMutation} from 'react-apollo'; // good one
+import { useMutation} from 'react-apollo';
 
 export const AddProject = (props) => {
 

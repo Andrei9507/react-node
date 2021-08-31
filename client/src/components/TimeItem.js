@@ -26,25 +26,18 @@ export const TimeItem = (props) => {
     return (
         <tr>
             <td>{timeAmount} H</td>
-            <td>{timeDescription} </td>
+            <td>{timeDescription ? timeDescription : 'No description'  } </td>
             <td >
-            {(() => {
-                    if (removeTimeQuestion) {
-                            return (
-                            <React.Fragment>
-                                <button className="btn btn-sm btn-secondary mr-2"  onClick={() => setRemoveTimeQuestion(false)} >No</button>
-                                <button className="btn btn-sm btn-danger"  onClick={removeTimeAction} >Yes</button>
-                            </React.Fragment>
-                            )
-                    }else {
-                        return (
-                            <React.Fragment>
-                                <button className="btn btn-sm btn-danger"  onClick={() => setRemoveTimeQuestion(true)} >Remove</button>
-                            </React.Fragment>
-                        )
-                    }
-                })()}
-                
+                {removeTimeQuestion ? (
+                    <React.Fragment>
+                        <button className="btn btn-sm btn-secondary mr-2"  onClick={() => setRemoveTimeQuestion(false)} >No</button>
+                        <button className="btn btn-sm btn-danger"  onClick={removeTimeAction} >Yes</button>
+                    </React.Fragment>
+                ): (
+                    <React.Fragment>
+                        <button className="btn btn-sm btn-danger"  onClick={() => setRemoveTimeQuestion(true)} >Remove</button>
+                    </React.Fragment>
+                )}
             </td>
         </tr>
     )

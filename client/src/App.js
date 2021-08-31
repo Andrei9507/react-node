@@ -7,8 +7,8 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import {ProjectList} from './components/ProjectList';
-import {ProjectDetails} from './components/ProjectDetails';
+import ProjectList from './components/ProjectList';
+import ProjectDetails from './components/ProjectDetails';
 
 // apollo client setup
 const client = new ApolloClient({

@@ -2,35 +2,35 @@ import React, {useState } from 'react';
 import {getProjectQuery} from '../queries/queries';
 import { useQuery} from 'react-apollo';
 import {TimeItem} from './TimeItem'
-import {AddTime} from './AddTime';
+import AddTime from './AddTime';
 
+const ProjectDetails = (props) => {
 
-export const ProjectDetails = (props) => {
-
-    
-    const [projectId] = useState(props.match.params.id)
-    const [showAddTImeForm, setShowAddTImeForm] = useState(false)
-    const [project, setProject ] = useState(null)
+    const [showAddTimeForm, setShowAddTimeForm] = useState(false)
   
     const { loading, error, data, refetch } = useQuery(getProjectQuery,{ 
         variables: {
-            id: projectId
-        },
-        onCompleted: setProject
+            id: props.match.params.id
+        }
         
     });
     const showAddTime = () => {
-        setShowAddTImeForm(true)
+        setShowAddTimeForm(true)
     }
 
     const hideAddTime = () => {
-        setShowAddTImeForm(false)
+        setShowAddTimeForm(false)
         callProject()
     }
 
     const displayTotalHours = () => {
-        if(project) {
-            const data = project
+        if(loading) {
+            return <p>Loading project ...</p>
+        }
+        if(error) {
+            <p>{error}</p>
+        }
+        if(data) {
             if(data.project.times.length) {
                 let sum = data.project.times.map(el => el.amount).reduce((accumulator, currentValue) => { return accumulator + currentValue });
                 
@@ -42,19 +42,18 @@ export const ProjectDetails = (props) => {
     }
     const callProject = async() => {
        await refetch()
-            .then((response) => {
-                setProject(response.data)
-                displayProjectDetails()
-            })
     }
     
 
     const displayProjectDetails = () => {
         
-        if(!project) {
-            return <div>No project selected</div>
-        } else {
-            const data = project
+        if(loading) {
+            return <p>Loading project ...</p>
+        }
+        if(error) {
+            <p>{error}</p>
+        }
+        if(data) {
             return(
                 <div>
                     <h2>Project Name: { data.project.name}</h2>
@@ -88,35 +87,27 @@ export const ProjectDetails = (props) => {
             )
         }
     }
-
     return (
+       
         <div id="project-details">
             {displayProjectDetails()}
 
-            {(() => {
-                    if (showAddTImeForm) {
-                        return (
-                            <button className="btn btn-sm btn-danger mb-5" onClick={hideAddTime}>
-                                Cancel
-                            </button>   
-                        )
-                    } else{
-                        return (
-                            <button className="btn btn-sm btn-primary" onClick={showAddTime}>
-                                Add Time
-                            </button>   
-                        )
-                    }
-                })()}
-            
 
-                {(() => {
-                    if (showAddTImeForm) {
-                        return (
-                            <AddTime  projectId={projectId} triggerCloseAddTime={hideAddTime}/>
-                        )
-                    }
-                })()} 
+            {showAddTimeForm ? (
+                <React.Fragment>
+                    <button className="btn btn-sm btn-danger mb-5" onClick={hideAddTime}>
+                        Cancel
+                    </button>
+                    <AddTime projectId={props.match.params.id} triggerCloseAddTime={hideAddTime}/>
+                </React.Fragment>
+            ) : (
+                <button className="btn btn-sm btn-primary" onClick={showAddTime}>
+                    Add Time
+                </button>
+            )}
         </div>
     )
 }
+
+
+export default ProjectDetails;

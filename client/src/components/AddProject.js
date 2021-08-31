@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {addProjectMutation} from '../queries/queries';
 import { useMutation} from 'react-apollo';
 
-export const AddProject = (props) => {
+const AddProject = (props) => {
 
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
@@ -38,3 +38,5 @@ export const AddProject = (props) => {
         </form>
     );
 }
+
+export default AddProject;

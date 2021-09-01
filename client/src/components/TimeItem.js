@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
 import { useMutation} from 'react-apollo';
 import {removeTimeMutation} from '../queries/queries';
+import PropTypes from 'prop-types'
 
-export const TimeItem = (props) => {
+const TimeItem = (props) => {
     
     const [timeAmount] = useState(props.timeItem.amount)
-    const [timeId] = useState(props.timeItem.id)
     const [timeDescription] = useState(props.timeItem.description)
     const [removeTimeQuestion, setRemoveTimeQuestion] = useState(false)
     const [removeTime] = useMutation(removeTimeMutation)
@@ -14,7 +14,7 @@ export const TimeItem = (props) => {
         e.preventDefault();
         removeTime({
             variables: {
-                id: timeId
+                id: props.timeItem.id
             }
         })
         .then(() => {
@@ -41,4 +41,11 @@ export const TimeItem = (props) => {
             </td>
         </tr>
     )
-} 
+}
+
+
+TimeItem.propTypes = {
+    timeItem: PropTypes.object.isRequired
+}
+
+export default TimeItem;

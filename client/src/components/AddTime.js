@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { useMutation} from 'react-apollo';
 import {addTimeMutation} from '../queries/queries';
 import {useForm} from 'react-hook-form';
-
+import PropTypes from 'prop-types'
 
 const AddTime = props => {
      
@@ -51,4 +51,7 @@ const AddTime = props => {
     )
 }
 
+AddTime.propTypes = {
+    projectId: PropTypes.string.isRequired
+}
 export default AddTime;

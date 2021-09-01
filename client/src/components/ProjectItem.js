@@ -67,7 +67,6 @@ const ProjectItem = (props) => {
                     { !removeProjectAsk ? (
                         <React.Fragment>
                             <Link to={`/projects/${projectId}`} className="btn btn-sm btn-info" >Project Details</Link>
-
                             <button className="btn btn-sm btn-secondary ml-2" onClick={showEditForm}>Edit</button>
                             <button className="btn btn-sm btn-danger ml-2"  onClick={ (e) => setRemoveProjectAsk(true)}>Remove</button>
                         </React.Fragment>
@@ -110,7 +109,6 @@ const ProjectItem = (props) => {
 }
 
 ProjectItem.propTypes = {
-    projectItem: PropTypes.object
+    projectItem: PropTypes.object.isRequired
 }
-// console.log(ProjectItem.propTypes )
 export default ProjectItem;

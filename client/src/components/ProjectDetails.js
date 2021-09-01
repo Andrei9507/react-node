@@ -1,7 +1,7 @@
 import React, {useState } from 'react';
 import {getProjectQuery} from '../queries/queries';
 import { useQuery} from 'react-apollo';
-import {TimeItem} from './TimeItem'
+import TimeItem from './TimeItem'
 import AddTime from './AddTime';
 
 const ProjectDetails = (props) => {

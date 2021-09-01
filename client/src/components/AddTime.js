@@ -9,6 +9,7 @@ const AddTime = props => {
     const [amount, setAmount ] = useState('');
     const [description, setDescription ] = useState('');
     const [projectId] = useState(props.projectId)
+    const { register, handleSubmit, clearErrors , formState: { errors } } = useForm();
     const [addTime] = useMutation(addTimeMutation, {
         variables: {
             amount: parseInt(amount),
@@ -17,7 +18,7 @@ const AddTime = props => {
         }
     })
 
-    const submitAddTime = (e) => {
+    const submitAddTime = (data, e) => {
         e.preventDefault()
         addTime()
         props.triggerCloseAddTime()
@@ -25,10 +26,19 @@ const AddTime = props => {
 
 
     return (
-        <form id="add-project" className="card p-4 mb-5" onSubmit={submitAddTime} >
+        <form id="add-project" className="card p-4 mb-5" onSubmit={handleSubmit(submitAddTime)} >
             <div className="form-group">
                 <label>Time amount</label>
-                <input type="number" name="amount" className="form-control" onChange={ (e) => setAmount(e.target.value)}/>
+                <input 
+                    type="number"
+                    className="form-control"
+                    {...register('amount', { required: "Amount is required", min: { value: 1, message: 'Minimum amount is 1' }  })} 
+                    onChange={ (e) => {setAmount(e.target.value); clearErrors('amount')} }
+                />
+                {errors.amount && (
+                    <span role="alert" className="text-danger">{errors.amount.message}</span>
+                )}
+
             </div>
             <div className="form-group">
                 <label>Time description</label>

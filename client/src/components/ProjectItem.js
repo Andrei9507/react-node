@@ -3,15 +3,16 @@ import { useMutation} from 'react-apollo';
 import {updateProjectMutation, removeProjectMutation, getProjectsQuery} from '../queries/queries';
 import {Link } from 'react-router-dom';
 import PropTypes from 'prop-types'
+import { useForm } from "react-hook-form";
 
 const ProjectItem = (props) => {
 
-    console.log(props)
     const [projectId] = useState(props.projectItem.id)
     const [projectName, setProjectName] = useState(props.projectItem.name)
     const [projectDescription, setProjectDescription] = useState(props.projectItem.description)
     const [showEdit, setShowEdit] = useState(false)
     const [removeProjectAsk, setRemoveProjectAsk] = useState(false)
+    const { register, handleSubmit, clearErrors , formState: { errors } } = useForm();
     const [updateProject] = useMutation(updateProjectMutation)
     const [removeProject] = useMutation(removeProjectMutation)
 
@@ -24,7 +25,7 @@ const ProjectItem = (props) => {
         setShowEdit(false)
     }
 
-    const submitForm = e => {
+    const submitForm = (data, e) => {
         e.preventDefault();
         updateProject({
             variables: {
@@ -82,9 +83,16 @@ const ProjectItem = (props) => {
             ) : (
                
                 <div className="card mb-5" style={{width: "18rem"}}>
-                    <form onSubmit={submitForm}>
+                    <form onSubmit={handleSubmit(submitForm)}>
                         <div className="card-body">
-                            <input className="form-control mb-2" value={projectName}  onChange={ (e) => setProjectName(e.target.value)} />
+                            <input  
+                                className="form-control mb-2"
+                                value={projectName}  {...register("name", { required: 'Project name is required' } )}
+                                onChange={ (e) => {setProjectName(e.target.value);  clearErrors('name');}} 
+                            />
+                            {errors.name && (
+                                <span role="alert" className="text-danger">{errors.name.message}</span>
+                            )}
                             <textarea className="form-control" value={projectDescription} onChange={ (e) => setProjectDescription(e.target.value)} ></textarea>
                         </div>
                         <div className="justify-content-center d-flex card-footer">
@@ -104,5 +112,5 @@ const ProjectItem = (props) => {
 ProjectItem.propTypes = {
     projectItem: PropTypes.object
 }
-console.log(ProjectItem.propTypes )
+// console.log(ProjectItem.propTypes )
 export default ProjectItem;

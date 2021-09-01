@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
 import {addProjectMutation} from '../queries/queries';
 import { useMutation} from 'react-apollo';
+import { useForm } from "react-hook-form";
 
 const AddProject = (props) => {
 
+    const { register, handleSubmit, clearErrors , formState: { errors } } = useForm();
     const [name, setName] = useState('');
     const [description, setDescription] = useState('');
     const [addProject] = useMutation(addProjectMutation)
 
-    const submitForm = e => {
+    // data  parameter is mandatory to can submit the form
+    const submitForm = (data, e) => {
         e.preventDefault();
         addProject({
             variables: {
@@ -23,10 +26,19 @@ const AddProject = (props) => {
     }
 
     return (
-        <form id="add-project" className="card p-4 mb-5" onSubmit={submitForm}>
+        <form id="add-project" className="card p-4 mb-5" onSubmit={handleSubmit(submitForm)}>
             <div className="form-group">
                 <label>Project Name</label>
-                <input type="text" className="form-control" onChange={ (e) => setName(e.target.value)}/>
+                <input  
+                    type="text" 
+                    className="form-control"
+                    {...register("name", { required: 'Project name is required' } )} 
+                    onChange={ (e) => {setName(e.target.value); clearErrors('name'); }}
+                />
+
+                {errors.name && (
+                    <span role="alert" className="text-danger">{errors.name.message}</span>
+                )}
             </div>
             <div className="form-group">
                 <label>Project description</label>

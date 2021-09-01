@@ -2,7 +2,7 @@
 # Steps to run the project local
 
 #### 1. Check for node and mongodb to be installed on your machine
-#### 2. After project is downloaded open server/index.php set your localhost with port for mongodb and set your database connection like in the next example:
+#### 2. After project is downloaded open server/index.php set and set your database connection like in the next example:
 #### 	mongoose.connect('mongodb://localhost:port/databaseName',  { useNewUrlParser: true, useUnifiedTopology: true });
 #### 3. Open client folder and run command: 
 ##### npm install

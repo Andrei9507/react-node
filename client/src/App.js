@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import ApolloClient from 'apollo-boost';
+import './app.css';
 import { ApolloProvider } from 'react-apollo'; // inject any data from the server trough this 
 import {
   BrowserRouter as Router,
@@ -22,7 +23,7 @@ class App extends Component {
           <nav className="navbar navbar-light bg-light">
             <ul className="navbar-nav">
               <li className="nav-item active ml-5">
-                <Link className="nav-link" style={{color:"black"}} to="/projects">Projects</Link>
+                <Link className="nav-link color-black" to="/projects">Projects</Link>
               </li>
             </ul>
           </nav>

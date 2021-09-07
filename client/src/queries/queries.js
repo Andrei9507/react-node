@@ -2,7 +2,7 @@ import {gql} from 'apollo-boost';
 
 // PROJECT
 const getProjectsQuery = gql`
-    {
+    query GetProjects {
         projects {
             name
             description
@@ -12,7 +12,7 @@ const getProjectsQuery = gql`
 `
 
 const addProjectMutation = gql`
-    mutation($name: String!, $description: String) {
+    mutation AddProject($name: String!, $description: String) {
         addProject(name:$name, description: $description){
             description
             name
@@ -22,7 +22,7 @@ const addProjectMutation = gql`
 `
 
 const getProjectQuery = gql`
-    query($id: ID){
+    query GetProject($id: ID){
         project(id: $id) {
             id
             name
@@ -39,7 +39,7 @@ const getProjectQuery = gql`
 
 
 const updateProjectMutation = gql`
-    mutation($name: String, $description: String, $id: ID) {
+    mutation UpdateProject($name: String, $description: String, $id: ID) {
         updateProject(name: $name, description: $description, id: $id){
             description
             name
@@ -50,7 +50,7 @@ const updateProjectMutation = gql`
 
 
 const removeProjectMutation = gql`
-    mutation($id: ID) {
+    mutation RemoverProject($id: ID) {
         removeProject(id: $id){
             description
             name
@@ -60,7 +60,7 @@ const removeProjectMutation = gql`
 `
 // TIME 
 const addTimeMutation = gql`
-    mutation($amount: Int, $description: String, $projectId: ID) {
+    mutation AddTime($amount: Int, $description: String, $projectId: ID) {
         addTime(amount: $amount, description: $description, projectId: $projectId){
             description
             amount
@@ -69,7 +69,7 @@ const addTimeMutation = gql`
     }
 `
 const removeTimeMutation = gql`
-    mutation($id: ID) {
+    mutation RemoveTime($id: ID) {
         removeTime(id: $id){
             description
             amount

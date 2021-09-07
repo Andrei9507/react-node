@@ -24,21 +24,13 @@ const ProjectDetails = (props) => {
     }
 
     const displayTotalHours = () => {
-        if(loading) {
-            return <p>Loading project ...</p>
+        if(!data.project) {
+            return <p>Project not found</p>
         }
-        if(error) {
-            <p>{error}</p>
+        if (data.project.times.length === 0) {
+            return 0;
         }
-        if(data) {
-            if(data.project.times.length) {
-                let sum = data.project.times.map(el => el.amount).reduce((accumulator, currentValue) => { return accumulator + currentValue });
-                
-                return sum
-            }
-            return <React.Fragment>0 </React.Fragment>
-           
-        }
+        return data.project.times.reduce((total, item) => total + item.amount, 0);
     }
     const callProject = async() => {
        await refetch()
@@ -51,41 +43,42 @@ const ProjectDetails = (props) => {
             return <p>Loading project ...</p>
         }
         if(error) {
-            <p>{error}</p>
+           return <p>{error.message}</p>
         }
-        if(data) {
-            return(
-                <div>
-                    <h2>Project Name: { data.project.name}</h2>
-                    <h2> Project Description: { data.project.description}</h2>
-                    <div className="justify-content-center d-flex">
-                        <table className="table table-bordered mt-5  project-times text-center">
-                            <thead>
-                                <tr>
-                                    <td><strong>Time Amount</strong></td>
-                                    <td><strong>Time Description</strong></td>
-                                    <td><strong>Action</strong></td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    data.project.times.map(item =>{
-                                        return (
-                                            <TimeItem key={item.id} timeItem={item} triggerTime={callProject}/>
-                                        )
-                                    })
-                                }
-                             <tr>
-                                <td colSpan="3">
-                                    Total Hours: {displayTotalHours()}
-                                </td>
+        if(!data.project) {
+            return <p>No project found!</p>
+        }
+        return(
+            <div>
+                <h2>Project Name: { data.project.name}</h2>
+                <h2> Project Description: { data.project.description}</h2>
+                <div className="justify-content-center d-flex">
+                    <table className="table table-bordered mt-5  project-times text-center">
+                        <thead>
+                            <tr>
+                                <td><strong>Time Amount</strong></td>
+                                <td><strong>Time Description</strong></td>
+                                <td><strong>Action</strong></td>
                             </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                        </thead>
+                        <tbody>
+                            {
+                                data.project.times.map(item => {
+                                    return (
+                                        <TimeItem key={item.id} timeItem={item} triggerTime={callProject}/>
+                                    )
+                                })
+                            }
+                            <tr>
+                            <td colSpan="3">
+                                Total Hours: {displayTotalHours()}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
-            )
-        }
+            </div>
+        )
     }
     return (
        

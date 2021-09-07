@@ -31,9 +31,12 @@ const ProjectList = () => {
             return <p>Loading project ...</p>
         }
         if(error) {
-            <p>{error}</p>
+           return  <p>{error.message}</p>
         }
         if(data) {
+            if(data.projects.length === 0) {
+                return <p> No Projects Found</p>
+            }
             return data.projects.map(project => {
                     return(
                         <ProjectItem key={project.id} projectItem={project} triggerParentUpdate={callProjects} />

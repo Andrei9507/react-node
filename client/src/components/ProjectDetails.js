@@ -51,7 +51,7 @@ const ProjectDetails = (props) => {
         return(
             <div>
                 <h2>Project Name: { data.project.name}</h2>
-                <h2> Project Description: { data.project.description}</h2>
+                <h2> Project Description: { data.project.description ? data.project.description : "No Description" }</h2>
                 <div className="justify-content-center d-flex">
                     <table className="table table-bordered mt-5  project-times text-center">
                         <thead>
